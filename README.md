@@ -14,9 +14,9 @@ HTTP to HTTPS redirection service, using [NodeJS](http://nodejs.org) and
       statuscode: 302
     }
 
-    http2s(h2sOptions, function(err, server) {
+    http2s(options, function(err, server) {
       console.log('HTTP:%d -> HTTPS:%d redirection service started',
-                  h2sOptions.http,
-                  h2sOptions.https
+                  options.http,
+                  options.https
       )
     })
