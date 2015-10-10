@@ -45,6 +45,11 @@ or clone repo and take care of dependencies yourself
       verbose: false         // print all status messages to console
     }
 
+## Run tests
+
+    npm install --dev
+    npm test
+
 ## Disclaimer
 
 Use at own risk.
