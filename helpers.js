@@ -6,6 +6,4 @@ function extend(obj, extensions) {
    }
 }
 
-module.exports = {
-  extend: extend
-};
+module.exports.extend = extend;
