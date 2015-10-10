@@ -30,7 +30,7 @@ or clone repo and take care of dependencies yourself
       )
     })
 
-### Options
+## Options
 
     var options = {
       http: 80,              // http port to listen to
@@ -44,3 +44,13 @@ or clone repo and take care of dependencies yourself
       message: 'Perhaps you were looking for <a href="%s" target="_self">the HTTPS site</a>?',
       verbose: false         // print all status messages to console
     }
+
+## Disclaimer
+
+Use at own risk.
+
+## License
+
+Licensed under Creative Commons CC0 1.0 Universal. All rights waived.
+Please see [LICENSE](https://github.com/stigok/http2s/blob/master/LICENSE) file
+for more information.
