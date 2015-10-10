@@ -1,4 +1,4 @@
-function extend(obj, extensions) {
+function overwrite(obj, extensions) {
    for (var i in extensions) {
       if (obj.hasOwnProperty(i)) {
          obj[i] = extensions[i]
@@ -6,4 +6,4 @@ function extend(obj, extensions) {
    }
 }
 
-module.exports.extend = extend;
+module.exports.overwrite = overwrite;
