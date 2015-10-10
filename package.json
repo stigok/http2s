@@ -1,0 +1,30 @@
+{
+  "name": "connect-http2s",
+  "version": "0.0.1",
+  "description": "HTTP to HTTPS redirection service",
+  "main": "http2s.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stigok/connect-http2s.git"
+  },
+  "keywords": [
+    "connect",
+    "http2s",
+    "http2https",
+    "https",
+    "ssl",
+    "redirect"
+  ],
+  "author": "stigok",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/stigok/connect-http2s/issues"
+  },
+  "homepage": "https://github.com/stigok/connect-http2s#readme",
+  "dependencies": {
+    "connect": "^3.4.0"
+  }
+}
