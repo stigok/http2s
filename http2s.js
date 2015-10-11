@@ -48,16 +48,13 @@ module.exports = function(options, cb) {
 
   // Register request handler
   app.use(requestHandler)
-  var server = app.listen(settings.http, settings.hostname, function() {
+  app.listen(settings.http, settings.hostname, function() {
     if (settings.verbose) {
       console.info('HTTP:%d -> HTTPS:%d redirection service started (%s)',
-                   settings.http,
-                   settings.https,
-                   settings.hostname
-      )
+                   settings.http, settings.https, settings.hostname)
     }
 
     // Execute callback when server is running
-    if (cb && typeof cb === "function") return cb(null, server)
+    if (cb && typeof cb === "function") return cb(null, settings)
   })
 }

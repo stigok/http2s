@@ -41,7 +41,12 @@ or clone repo and take care of dependencies yourself
 
 Simple
 
-    require('http2s')(function(err, server) { console.info("port 80 -> 443 http2s redirection started") })
+    var http2s = require('../http2s.js')
+
+    http2s(function(err, settings) {
+      console.log("port %d -> %d http2s redirection started",
+                  settings.http, settings.https)
+    })
 
 With options
 
