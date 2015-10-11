@@ -14,6 +14,34 @@ or clone repo and take care of dependencies yourself
 
 ## Usage
 
+    http2s([options,], callback)
+    // callback called with callback(err, httpServer)
+
+## Options
+
+  Below options are the default values
+
+    var options = {
+      http: 80,              // http port to listen to
+      https: 443,            // https port to redirect to
+      hostname: 'localhost', // server hostname or ip
+      auto: true,            // automatically redirect
+      statuscode: 303,       // http status code to use for automatic redirect
+      singleTarget: false,   // false or '/path/to/page' to redirect all requests to
+                             // html message format to print to clients
+      message: 'Perhaps you were looking for' +
+               '<a href="%s" target="_self">the HTTPS site</a>?',
+      verbose: false         // print all status messages to console
+    }
+
+## Examples
+
+Simple
+
+    require('http2s')(function(err, server) { console.info("port 80 -> 443 http2s redirection started") })
+
+With options
+
     var http2s = require('http2s')
 
     var options = {
@@ -29,21 +57,6 @@ or clone repo and take care of dependencies yourself
                   options.https
       )
     })
-
-## Options
-
-    var options = {
-      http: 80,              // http port to listen to
-      https: 443,            // https port to redirect to
-      hostname: 'localhost', // server hostname or ip
-      auto: false,           // automatically redirect
-      statuscode: 302,       // http status code to use for automatic redirect
-                             // redirect all requests to same url
-      singleTarget: '/account/user'
-                             // html message format to print to clients
-      message: 'Perhaps you were looking for <a href="%s" target="_self">the HTTPS site</a>?',
-      verbose: false         // print all status messages to console
-    }
 
 ## Run tests
 

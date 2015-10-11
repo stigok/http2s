@@ -1,4 +1,3 @@
-var http = require('http')
 var connect = require('connect')
 var util = require('util')
 var app = connect()
@@ -6,14 +5,16 @@ var helpers = require('./helpers.js')
 
 // Default settings
 var settings = {
-  http: 8080,
-  https: 8445,
-  hostname: 'localhost',
-  message: 'Perhaps you were looking for <a href="%s" target="_self">the HTTPS site</a>?',
-  auto: false,
-  statuscode: 303,
-  singleTarget: false,
-  verbose: false
+  http: 80,              // http port to listen to
+  https: 443,            // https port to redirect to
+  hostname: 'localhost', // server hostname or ip
+  auto: true,            // automatically redirect
+  statuscode: 303,       // http status code to use for automatic redirect
+  singleTarget: false,   // false or '/path/to/page' to redirect all requests to
+                         // html message format to print to clients
+  message: 'Perhaps you were looking for' +
+           '<a href="%s" target="_self">the HTTPS site</a>?',
+  verbose: false         // print all status messages to console
 }
 
 // Catch all requests and provide link to https site
@@ -21,11 +22,11 @@ var requestHandler = function(req, res) {
   if (settings.verbose) console.log('HTTP Request received for :' + settings.http + req.url)
 
   // Set redirection url
-  var url = 'https://%s:%d%s'
-  if (settings.singleTarget)
-    url = util.format(url, settings.hostname, settings.https, settings.singleTarget)
-  else
-    url = util.format(url, settings.hostname, settings.https, req.url)
+  var url = util.format('https://%s:%d%s', {
+    settings.hostname,
+    settings.https,
+    settings.singleTarget || req.url
+  })
 
   // Redirect automatically or respond with a 404 with custom message
   if (settings.auto) {
