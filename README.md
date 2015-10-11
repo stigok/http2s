@@ -21,17 +21,20 @@ or clone repo and take care of dependencies yourself
 
   Below options are the default values
 
-    var options = {
-      http: 80,              // http port to listen to
-      https: 443,            // https port to redirect to
-      hostname: 'localhost', // server hostname or ip
-      auto: true,            // automatically redirect
-      statuscode: 303,       // http status code to use for automatic redirect
-      singleTarget: false,   // false or '/path/to/page' to redirect all requests to
-                             // html message format to print to clients
+    // Default settings
+    var settings = {
+      http: 80,                // http port to listen to
+      https: 443,              // https port to redirect to
+      hostname: 'localhost',   // server hostname or ip
+      auto: true,              // automatically redirect
+      redirectStatus: 303,     // http status code to use for automatic redirect
+      singleTarget: false,     // false or '/path/to/page' to redirect all requests to
+                               // html message format to print to clients
       message: 'Perhaps you were looking for' +
                '<a href="%s" target="_self">the HTTPS site</a>?',
-      verbose: false         // print all status messages to console
+      messageType: 'text/html' // mime content type to use for message
+      messageStatus: 404,      // http status code to use when showing message
+      verbose: false           // print all status messages to console
     }
 
 ## Examples
