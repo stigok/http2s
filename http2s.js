@@ -14,7 +14,7 @@ var settings = {
                            // html message format to print to clients
   message: 'Perhaps you were looking for' +
            '<a href="%s" target="_self">the HTTPS site</a>?',
-  messageType: 'text/html' // mime content type to use for message
+  messageType: 'text/html',// mime content type to use for message
   messageStatus: 404,      // http status code to use when showing message
   verbose: false           // print all status messages to console
 }
@@ -24,11 +24,11 @@ var requestHandler = function(req, res) {
   if (settings.verbose) console.log('HTTP Request received for :' + settings.http + req.url)
 
   // Set redirection url
-  var url = util.format('https://%s:%d%s', {
+  var url = util.format('https://%s:%d%s',
     settings.hostname,
     settings.https,
     settings.singleTarget || req.url
-  })
+  )
 
   // Redirect automatically or respond with a 404 with custom message
   if (settings.auto) {
@@ -44,7 +44,7 @@ var requestHandler = function(req, res) {
 module.exports = function(options, cb) {
   // Set custom user options
   if (options && typeof options === "object")
-    helpers.extend(settings, options)
+    helpers.overwrite(settings, options)
 
   // Register request handler
   app.use(requestHandler)
