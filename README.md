@@ -14,8 +14,8 @@ or clone repo and take care of dependencies yourself
 
 ## Usage
 
-    http2s([options,], callback)
-    // callback called with callback(err, httpServer)
+    http2s([options,] [callback])
+    // callback is a function called with *callback(err, settings)* on done
 
 ## Options
 
@@ -78,5 +78,5 @@ Use at own risk.
 ## License
 
 Licensed under Creative Commons CC0 1.0 Universal. All rights waived.
-Please see [LICENSE](https://github.com/stigok/http2s/blob/master/LICENSE) file
+See [LICENSE](https://github.com/stigok/http2s/blob/master/LICENSE) file
 for more information.
