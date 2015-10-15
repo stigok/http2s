@@ -1,6 +1,6 @@
 {
   "name": "http2s",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "HTTP to HTTPS redirection service",
   "main": "http2s.js",
   "scripts": {
