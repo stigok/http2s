@@ -59,4 +59,27 @@ module.exports = function(options, cb) {
     // Execute callback when server is running
     if (cb && typeof cb === "function") return cb(null, settings)
   })
+
+  server.on('error', function(err) {
+    var printedFull = false;
+
+    switch (err.code) {
+      case "EACCES":
+        console.error("Permission denied on attempt to listen to port " + settings.http);
+        break;
+      case "EADDRINUSE":
+        console.error("Port " + settings.http +" is already in use");
+        break;
+      default:
+        console.error(err);
+        printedFull = true;
+        break;
+    }
+
+    // Print original error as well in verbose mode
+    if (!printedFull && settings.verbose) console.error(err);
+
+    // Kill process on server errors
+    process.exit(1);
+  });
 }
