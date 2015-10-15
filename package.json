@@ -4,6 +4,8 @@
   "description": "HTTP to HTTPS redirection service",
   "main": "http2s.js",
   "scripts": {
+    "production": "node bin/default",
+    "development": "node bin/development",
     "test": "mocha"
   },
   "repository": {

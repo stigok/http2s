@@ -17,6 +17,15 @@ or clone repo and take care of dependencies yourself
     http2s([options,] [callback])
     // callback is a function called with *callback(err, settings)* on done
 
+Two example scripts are available
+
+    // Automatic redirect from http:80 to https:443
+    // Needs special privileges for all ports < 1000 (or root access, but not advised)
+    npm run production
+
+    // Manual redirect from http:8080 to https:8443
+    npm run development
+
 ## Options
 
   Below options are the default values
