@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var http2s = require('../http2s.js')
+var http2s = require('../http2s.js');
 
 // Run with default settings
 http2s(function(err, settings) {
   if (err) return console.error(err);
   console.log("port %d -> %d http2s redirection started",
-              settings.http, settings.https)
-})
+              settings.http, settings.https);
+});

@@ -1,7 +1,7 @@
-var connect = require('connect')
-var util = require('util')
-var app = connect()
-var helpers = require('./helpers.js')
+var connect = require('connect');
+var util = require('util');
+var app = connect();
+var helpers = require('./helpers.js');
 
 // Default settings
 var settings = {
@@ -12,28 +12,28 @@ var settings = {
   redirectStatus: 303,     // http status code to use for automatic redirect
   singleTarget: false,     // false or '/path/to/page' to redirect all requests to
                            // html message format to print to clients
-  message: 'Perhaps you were looking for' +
+  message: 'Perhaps you are looking for ' +
            '<a href="%s" target="_self">the HTTPS site</a>?',
   messageType: 'text/html',// mime content type to use for message
   messageStatus: 404,      // http status code to use when showing message
   verbose: false           // print all status messages to console
-}
+};
 
 // Catch all requests and provide link to https site
 var requestHandler = function(req, res) {
-  if (settings.verbose) console.log('HTTP Request received for :' + settings.http + req.url)
+  if (settings.verbose) console.log('HTTP Request received for :' + settings.http + req.url);
 
   // Set redirection url
   var url = util.format('https://%s:%d%s',
     settings.hostname,
     settings.https,
     settings.singleTarget || req.url
-  )
+  );
 
   // Redirect automatically or respond with a 404 with custom message
   if (settings.auto) {
-    res.writeHead(settings.redirectStatus, { 'Location' : url })
-    return res.end()
+    res.writeHead(settings.redirectStatus, { 'Location' : url });
+    return res.end();
   }
   else {
     res.writeHead(settings.messageStatus,
@@ -44,20 +44,25 @@ var requestHandler = function(req, res) {
 }
 
 module.exports = function(options, cb) {
-  // Set custom user options
-  if (options && typeof options === "object")
-    helpers.overwrite(settings, options)
+  if (typeof options === "function") {
+    cb = options;
+    options = {};
+  }
+
+  // Set custom options
+  helpers.overwrite(settings, options);
 
   // Register request handler
-  app.use(requestHandler)
-  app.listen(settings.http, settings.hostname, function() {
+  app.use(requestHandler);
+
+  var server = app.listen(settings.http, settings.hostname, function(err, server) {
     if (settings.verbose) {
       console.info('HTTP:%d -> HTTPS:%d redirection service started (%s)',
-                   settings.http, settings.https, settings.hostname)
+                   settings.http, settings.https, settings.hostname);
     }
 
     // Execute callback when server is running
-    if (cb && typeof cb === "function") return cb(null, settings)
+    if (typeof cb === "function") return cb(null, settings);
   })
 
   server.on('error', function(err) {
