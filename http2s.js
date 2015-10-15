@@ -36,8 +36,10 @@ var requestHandler = function(req, res) {
     return res.end()
   }
   else {
-    res.writeHead(settings.messageStatus, { 'Content-Type': settings.messageType })
-    return res.end(util.format(settings.message, url))
+    res.writeHead(settings.messageStatus,
+                  { 'Content-Type': 'text/html; charset=utf-8' },
+                  util.format(settings.message, url));
+    return res.end();
   }
 }
 
