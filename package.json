@@ -1,10 +1,12 @@
 {
   "name": "http2s",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "HTTP to HTTPS redirection service",
   "main": "http2s.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "production": "node bin/default",
+    "development": "node bin/development",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -26,5 +28,9 @@
   "homepage": "https://github.com/stigok/http2s#readme",
   "dependencies": {
     "connect": "^3.4.0"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3"
   }
 }

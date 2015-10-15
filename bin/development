@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+var http2s = require('../http2s.js');
+
+var options = {
+  http: 8080,
+  https: 8443,
+  auto: false,
+  verbose: true
+};
+
+// Run with custom settings
+http2s(options, function(err, settings) {
+  console.log("port %d -> %d http2s redirection started",
+              settings.http, settings.https);
+});
