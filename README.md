@@ -54,10 +54,10 @@ Run with defaults
 
     var http2s = require('../http2s.js')
 
-    http2s(function(err, settings) {
+    http2s(function(err, activeSettings) {
       if (err) throw new Error(err);
       console.log("port %d -> %d http2s redirection started",
-                  settings.http, settings.https)
+                  activeSettings.http, activeSettings.https)
     })
 
 With options
@@ -71,10 +71,10 @@ With options
       auto: true
     }
 
-    http2s(options, function(err, server) {
+    http2s(options, function(err, activeSettings) {
       if (err) throw new Error(err);
       console.log('HTTP:%d -> HTTPS:%d redirection service started',
-                  options.http, options.https
+                  activeSettings.http, activeSettings.https
       )
     })
 
