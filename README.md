@@ -2,8 +2,10 @@
 HTTP to HTTPS redirection service, using [NodeJS](http://nodejs.org) and
 [Connect](http://senchalabs.github.com/connect)
 
+[![Build Status](https://travis-ci.org/stigok/http2s.svg)](https://travis-ci.org/stigok/http2s)
+
 ## Installation
-Install with NPM
+Install with npm (https://www.npmjs.com/package/http2s)
 
     npm install http2s
 
@@ -48,11 +50,12 @@ Two example scripts are available
 
 ## Examples
 
-Simple
+Run with defaults
 
     var http2s = require('../http2s.js')
 
     http2s(function(err, settings) {
+      if (err) throw new Error(err);
       console.log("port %d -> %d http2s redirection started",
                   settings.http, settings.https)
     })
@@ -69,9 +72,9 @@ With options
     }
 
     http2s(options, function(err, server) {
+      if (err) throw new Error(err);
       console.log('HTTP:%d -> HTTPS:%d redirection service started',
-                  options.http,
-                  options.https
+                  options.http, options.https
       )
     })
 
