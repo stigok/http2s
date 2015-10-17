@@ -80,6 +80,8 @@ With options
 
 ## Run tests
 
+*Warning:* weak coverage
+
     npm install --dev
     npm test
 
