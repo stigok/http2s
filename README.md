@@ -9,24 +9,21 @@ Install with npm (https://www.npmjs.com/package/http2s)
 
     npm install http2s
 
-or clone repo and take care of dependencies yourself
+## Quick start
 
-    git clone https://github.com/stigok/http2s.git && cd http2s
-    npm install
+Redirect clients from *http:8080* to *https:8443*
+
+    npm run development
+
+Redirect clients from *http:80* to *https:443*
+
+    npm run production
 
 ## Usage
 
     http2s([options,] [callback])
-    // callback is a function called with *callback(err, settings)* on done
 
-Two example scripts are available
-
-    // Automatic redirect from http:80 to https:443
-    // Needs special privileges for all ports < 1000 (or root access, but not advised)
-    npm run production
-
-    // Manual redirect from http:8080 to https:8443
-    npm run development
+Calls `callback(err, activeSettings)` on done
 
 ## Options
 
@@ -77,13 +74,6 @@ With options
                   activeSettings.http, activeSettings.https
       )
     })
-
-## Run tests
-
-*Warning:* weak coverage
-
-    npm install --dev
-    npm test
 
 ## Disclaimer
 
