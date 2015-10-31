@@ -1,6 +1,6 @@
 {
   "name": "http2s",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "HTTP to HTTPS redirection service",
   "main": "http2s.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "redirect"
   ],
   "author": "stigok",
-  "license": "CC0-1.0",
+  "license": "SEE LICENSE IN LICENSE",
   "bugs": {
     "url": "https://github.com/stigok/http2s/issues"
   },
