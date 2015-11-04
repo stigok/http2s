@@ -2,8 +2,6 @@
 HTTP to HTTPS redirection service, using [NodeJS](http://nodejs.org) and
 [Connect](http://senchalabs.github.com/connect)
 
-[![Build Status](https://travis-ci.org/stigok/http2s.svg)](https://travis-ci.org/stigok/http2s)
-
 ## Installation
 Install with npm (https://www.npmjs.com/package/http2s)
 
