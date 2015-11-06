@@ -1,27 +1,66 @@
-var connect = require('connect');
+var app = require('connect')();
 var util = require('util');
-var app = connect();
 var helpers = require('./helpers.js');
+var logger = require('./logger.js');
 
 // Default settings
 var settings = {
-  http: 80,                // http port to listen to
-  https: 443,              // https port to redirect to
-  hostname: 'localhost',   // server hostname or ip
-  auto: true,              // automatically redirect
-  redirectStatus: 303,     // http status code to use for automatic redirect
-  singleTarget: false,     // false or '/path/to/page' to redirect all requests to
-                           // html message format to print to clients
+  // http port to listen to
+  http: 80,
+  // https port to redirect to
+  https: 443,
+  // server hostname or ip
+  hostname: 'localhost',
+  // automatically redirect
+  auto: true,
+  // http status code to use for automatic redirect
+  redirectStatus: 303,
+  // false or '/path/to/page' to redirect all requests to
+  singleTarget: false,
+  // html message format to print to clients
   message: 'Perhaps you are looking for ' +
            '<a href="%s" target="_self">the HTTPS site</a>?',
-  messageType: 'text/html',// mime content type to use for message
-  messageStatus: 404,      // http status code to use when showing message
-  verbose: false           // print all status messages to console
+  // mime content type to use for message
+  messageType: 'text/html',
+  // http status code to use when showing message
+  messageStatus: 404,
+  // error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
+  logLevel: 2
 };
 
-// Catch all requests and provide link to https site
-var requestHandler = function(req, res) {
-  if (settings.verbose) console.log('HTTP Request received for :' + settings.http + req.url);
+module.exports = function (options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
+  }
+
+  // Merge custom settings
+  helpers.overwrite(settings, options);
+  logger.logLevel = settings.logLevel;
+
+  // Register request handler
+  app.use(requestHandler);
+
+  // Start listening for http connections
+  var server = app.listen(settings.http, settings.hostname, function (err) {
+    logger.info(
+      'HTTP:%d -> HTTPS:%d redirection service started (%s)',
+      settings.http, settings.https, settings.hostname
+    );
+
+    // Execute callback when server is running
+    if (typeof cb === 'function') {
+      return cb(err, settings);
+    } else if (err) {
+      logger.error(err);
+    }
+  });
+
+  server.on('error', errorHandler);
+};
+
+function requestHandler(req, res) {
+  logger.verbose('HTTP Request received : ' + settings.http + req.url);
 
   // Set redirection url
   var url = util.format('https://%s:%d%s',
@@ -30,61 +69,46 @@ var requestHandler = function(req, res) {
     settings.singleTarget || req.url
   );
 
-  // Redirect automatically or respond with a 404 with custom message
+  // Redirect automatically if specified
   if (settings.auto) {
-    res.writeHead(settings.redirectStatus, { 'Location' : url });
+    res.writeHead(settings.redirectStatus, {Location: url});
     return res.end();
   }
-  else {
-    res.writeHead(settings.messageStatus,
-                  { 'Content-Type': 'text/html; charset=utf-8' },
-                  util.format(settings.message, url));
-    return res.end();
-  }
+
+  // Or respond with a 404 with custom message
+  var body = util.format(settings.message, url);
+  res.writeHead(
+    settings.messageStatus,
+    {
+      'Content-Length': Buffer.byteLength(body),
+      'Content-Type': 'text/html; charset=utf-8'
+    }
+  );
+  res.write(body);
+  res.end();
 }
 
-module.exports = function(options, cb) {
-  if (typeof options === "function") {
-    cb = options;
-    options = {};
+function errorHandler(err) {
+  var printedFull = false;
+
+  switch (err.code) {
+    case 'EACCES':
+      logger.error('Permission denied when attempting to listen to port %d', settings.http);
+      break;
+    case 'EADDRINUSE':
+      logger.error('Port %d is already in use', settings.http);
+      break;
+    default:
+      logger.error(err);
+      printedFull = true;
+      break;
   }
 
-  // Set custom options
-  helpers.overwrite(settings, options);
+  // Print error details in verbose mode
+  if (!printedFull) {
+    logger.verbose(err);
+  }
 
-  // Register request handler
-  app.use(requestHandler);
-
-  var server = app.listen(settings.http, settings.hostname, function(err, server) {
-    if (settings.verbose) {
-      console.info('HTTP:%d -> HTTPS:%d redirection service started (%s)',
-                   settings.http, settings.https, settings.hostname);
-    }
-
-    // Execute callback when server is running
-    if (typeof cb === "function") return cb(null, settings);
-  })
-
-  server.on('error', function(err) {
-    var printedFull = false;
-
-    switch (err.code) {
-      case "EACCES":
-        console.error("Permission denied on attempt to listen to port " + settings.http);
-        break;
-      case "EADDRINUSE":
-        console.error("Port " + settings.http +" is already in use");
-        break;
-      default:
-        console.error(err);
-        printedFull = true;
-        break;
-    }
-
-    // Print original error as well in verbose mode
-    if (!printedFull && settings.verbose) console.error(err);
-
-    // Kill process on server errors
-    process.exit(1);
-  });
+  // Kill process on server errors
+  process.exit(1);
 }

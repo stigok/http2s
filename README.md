@@ -2,8 +2,6 @@
 HTTP to HTTPS redirection service, using [NodeJS](http://nodejs.org) and
 [Connect](http://senchalabs.github.com/connect)
 
-[![Build Status](https://travis-ci.org/stigok/http2s.svg)](https://travis-ci.org/stigok/http2s)
-
 ## Installation
 Install with npm (https://www.npmjs.com/package/http2s)
 
@@ -23,64 +21,46 @@ Redirect clients from *http:80* to *https:443*
 
     http2s([options,] [callback])
 
-Calls `callback(err, activeSettings)` on done
+Calls `callback(err, settings)` on done, where `settings` is an object
+containing the current settings.
 
-## Options
+### Options
 
-  Below options are the default values
+Below options are the default values
 
-    // Default settings
     var settings = {
-      http: 80,                // http port to listen to
-      https: 443,              // https port to redirect to
-      hostname: 'localhost',   // server hostname or ip
-      auto: true,              // automatically redirect
-      redirectStatus: 303,     // http status code to use for automatic redirect
-      singleTarget: false,     // false or '/path/to/page' to redirect all requests to
-                               // html message format to print to clients
-      message: 'Perhaps you were looking for' +
-               '<a href="%s" target="_self">the HTTPS site</a>?',
-      messageType: 'text/html' // mime content type to use for message
-      messageStatus: 404,      // http status code to use when showing message
-      verbose: false           // print all status messages to console
-    }
-
-## Examples
-
-Run with defaults
-
-    var http2s = require('../http2s.js')
-
-    http2s(function(err, activeSettings) {
-      if (err) throw new Error(err);
-      console.log("port %d -> %d http2s redirection started",
-                  activeSettings.http, activeSettings.https)
-    })
-
-With options
-
-    var http2s = require('http2s')
-
-    var options = {
-      http: 8080,
-      https: 8443,
+      // http port to listen to
+      http: 80,
+      // https port to redirect to
+      https: 443,
+      // server hostname or ip
       hostname: 'localhost',
-      auto: true
-    }
+      // automatically redirect
+      auto: true,
+      // http status code to use for automatic redirect
+      redirectStatus: 303,
+      // false or '/path/to/page' to redirect all requests to
+      singleTarget: false,
+      // html message format to print to clients
+      message: 'Perhaps you are looking for ' +
+               '<a href="%s" target="_self">the HTTPS site</a>?',
+      // mime content type to use for message
+      messageType: 'text/html',
+      // http status code to use when showing message
+      messageStatus: 404,
+      // error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
+      logLevel: 2
+    };
 
-    http2s(options, function(err, activeSettings) {
-      if (err) throw new Error(err);
-      console.log('HTTP:%d -> HTTPS:%d redirection service started',
-                  activeSettings.http, activeSettings.https
-      )
-    })
+### Examples
 
-## Disclaimer
-
-Use at own risk.
+See [bin/default](blob/master/bin/default) and [bin/development](blob/master/bin/development) for usage examples.
 
 ## License
 
 Licensed under Creative Commons CC0 1.0 Universal. All rights waived.
-See [LICENSE](https://github.com/stigok/http2s/blob/master/LICENSE) file
-for more information.
+See [LICENSE](https://github.com/stigok/http2s/blob/master/LICENSE) for more information.
+
+## Disclaimer
+
+Use at own risk.

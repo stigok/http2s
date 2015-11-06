@@ -1,6 +1,6 @@
 {
   "name": "http2s",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "HTTP to HTTPS redirection service",
   "main": "http2s.js",
   "scripts": {
@@ -14,11 +14,12 @@
   },
   "keywords": [
     "connect",
+    "http",
+    "https",
     "http2s",
     "http2https",
-    "https",
-    "ssl",
-    "redirect"
+    "redirect",
+    "http-redirect"
   ],
   "author": "stigok",
   "license": "SEE LICENSE IN LICENSE",
@@ -30,7 +31,10 @@
     "connect": "^3.4.0"
   },
   "devDependencies": {
-    "chai": "^3.3.0",
+    "chai": "^3.4.0",
     "mocha": "^2.3.3"
+  },
+  "xo": {
+    "space": true
   }
 }

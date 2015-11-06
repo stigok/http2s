@@ -6,11 +6,12 @@ var options = {
   http: 8080,
   https: 8443,
   auto: false,
-  verbose: true
+  logLevel: 5
 };
 
 // Run with custom settings
-http2s(options, function(err, settings) {
-  console.log("port %d -> %d http2s redirection started",
-              settings.http, settings.https);
+http2s(options, function (err) {
+  if (err) {
+    return console.error(err);
+  }
 });
