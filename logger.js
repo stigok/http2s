@@ -30,12 +30,12 @@ Logger.prototype._log = function (level) {
 };
 
 Logger.prototype.error = function () {
-  var args = helpers.prependArgument(0, arguments);
+  var args = helpers.prependArguments(0, arguments);
   this._log.apply(this, args);
 };
 
 Logger.prototype.info = function () {
-  var args = helpers.prependArgument(2, arguments);
+  var args = helpers.prependArguments(2, arguments);
   this._log.apply(this, args);
 };
 
@@ -45,7 +45,7 @@ Logger.prototype.log = function () {
 };
 
 Logger.prototype.verbose = function () {
-  var args = helpers.prependArgument(3, arguments);
+  var args = helpers.prependArguments(3, arguments);
   this._log.apply(this, args);
 };
 
