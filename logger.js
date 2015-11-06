@@ -2,19 +2,20 @@ var util = require('util');
 var helpers = require('./helpers');
 
 /*
-  Log levels
-  error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
+*  Log levels
+*  error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
 */
 var Logger = function (level) {
   this.logLevel = level || 2;
 };
 
 Logger.prototype._log = function (level) {
-  // Don't do anything if attempting to log more than we want
+  // Don't log any more than we want
   if (level > this.logLevel) {
     return;
   }
 
+  // Take all args but the first one and forward to util.format
   var args = Array.prototype.slice.call(arguments, 1);
   var message = util.format.apply(null, args);
 

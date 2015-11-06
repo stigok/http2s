@@ -37,7 +37,6 @@ module.exports = function (options, cb) {
 
   // Merge custom settings
   helpers.overwrite(settings, options);
-
   logger.logLevel = settings.logLevel;
 
   // Register request handler
