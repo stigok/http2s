@@ -5,3 +5,11 @@ module.exports.overwrite = function (obj, extensions) {
     }
   }
 };
+
+module.exports.prependArgument = function (additional, existing) {
+  var args = [additional];
+  for (var i = 0; i < existing.length; i++) {
+    args.push(existing[i]);
+  }
+  return args;
+};

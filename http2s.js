@@ -2,6 +2,7 @@ var connect = require('connect');
 var util = require('util');
 var app = connect();
 var helpers = require('./helpers.js');
+var logger = require('./logger');
 
 // Default settings
 var settings = {
@@ -24,8 +25,8 @@ var settings = {
   messageType: 'text/html',
   // http status code to use when showing message
   messageStatus: 404,
-  // print all status messages to console
-  verbose: false
+  // error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
+  logLevel: 2
 };
 
 module.exports = function (options, cb) {
@@ -37,23 +38,23 @@ module.exports = function (options, cb) {
   // Merge custom settings
   helpers.overwrite(settings, options);
 
+  logger.logLevel = settings.logLevel;
+
   // Register request handler
   app.use(requestHandler);
 
   // Start listening for http connections
   var server = app.listen(settings.http, settings.hostname, function (err) {
-    if (settings.verbose) {
-      console.info(
-        'HTTP:%d -> HTTPS:%d redirection service started (%s)',
-        settings.http, settings.https, settings.hostname
-      );
-    }
+    logger.info(
+      'HTTP:%d -> HTTPS:%d redirection service started (%s)',
+      settings.http, settings.https, settings.hostname
+    );
 
     // Execute callback when server is running
     if (typeof cb === 'function') {
       return cb(err, settings);
     } else if (err) {
-      console.error(err);
+      logger.error(err);
     }
   });
 
@@ -61,9 +62,7 @@ module.exports = function (options, cb) {
 };
 
 function requestHandler(req, res) {
-  if (settings.verbose) {
-    console.log('HTTP Request received for :' + settings.http + req.url);
-  }
+  logger.verbose('HTTP Request received : ' + settings.http + req.url);
 
   // Set redirection url
   var url = util.format('https://%s:%d%s',
@@ -96,20 +95,20 @@ function errorHandler(err) {
 
   switch (err.code) {
     case 'EACCES':
-      console.error('Permission denied on attempt to listen to port ' + settings.http);
+      logger.error('Permission denied when attempting to listen to port %d', settings.http);
       break;
     case 'EADDRINUSE':
-      console.error('Port ' + settings.http + ' is already in use');
+      logger.error('Port %d is already in use', settings.http);
       break;
     default:
-      console.error(err);
+      logger.error(err);
       printedFull = true;
       break;
   }
 
-  // Print original error as well in verbose mode
-  if (!printedFull && settings.verbose) {
-    console.log(err);
+  // Print error details in verbose mode
+  if (!printedFull) {
+    logger.verbose(err);
   }
 
   // Kill process on server errors

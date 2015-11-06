@@ -6,7 +6,7 @@ var options = {
   http: 8080,
   https: 8443,
   auto: false,
-  verbose: true
+  logLevel: 5
 };
 
 // Run with custom settings
