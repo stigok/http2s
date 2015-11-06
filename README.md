@@ -54,12 +54,12 @@ Below options are the default values
 
 ### Examples
 
-See [bin/default](blob/master/bin/default) and [bin/development](blob/master/bin/development) for usage examples.
+See [bin/default](bin/default) and [bin/development](bin/development) for usage examples.
 
 ## License
 
 Licensed under Creative Commons CC0 1.0 Universal. All rights waived.
-See [LICENSE](https://github.com/stigok/http2s/blob/master/LICENSE) for more information.
+See [LICENSE](LICENSE) for more information.
 
 ## Disclaimer
 
