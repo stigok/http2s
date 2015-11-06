@@ -1,8 +1,7 @@
-var connect = require('connect');
+var app = require('connect')();
 var util = require('util');
-var app = connect();
 var helpers = require('./helpers.js');
-var logger = require('./logger');
+var logger = require('./logger.js');
 
 // Default settings
 var settings = {
