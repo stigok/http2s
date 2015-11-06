@@ -40,6 +40,7 @@ module.exports = function (options, cb) {
   // Register request handler
   app.use(requestHandler);
 
+  // Start listening for http connections
   var server = app.listen(settings.http, settings.hostname, function (err) {
     if (settings.verbose) {
       console.info(
@@ -56,30 +57,7 @@ module.exports = function (options, cb) {
     }
   });
 
-  server.on('error', function (err) {
-    var printedFull = false;
-
-    switch (err.code) {
-      case 'EACCES':
-        console.error('Permission denied on attempt to listen to port ' + settings.http);
-        break;
-      case 'EADDRINUSE':
-        console.error('Port ' + settings.http + ' is already in use');
-        break;
-      default:
-        console.error(err);
-        printedFull = true;
-        break;
-    }
-
-    // Print original error as well in verbose mode
-    if (!printedFull && settings.verbose) {
-      console.log(err);
-    }
-
-    // Kill process on server errors
-    process.exit(1);
-  });
+  server.on('error', errorHandler);
 };
 
 function requestHandler(req, res) {
@@ -111,4 +89,29 @@ function requestHandler(req, res) {
   );
   res.write(body);
   res.end();
+}
+
+function errorHandler(err) {
+  var printedFull = false;
+
+  switch (err.code) {
+    case 'EACCES':
+      console.error('Permission denied on attempt to listen to port ' + settings.http);
+      break;
+    case 'EADDRINUSE':
+      console.error('Port ' + settings.http + ' is already in use');
+      break;
+    default:
+      console.error(err);
+      printedFull = true;
+      break;
+  }
+
+  // Print original error as well in verbose mode
+  if (!printedFull && settings.verbose) {
+    console.log(err);
+  }
+
+  // Kill process on server errors
+  process.exit(1);
 }
