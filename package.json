@@ -5,7 +5,8 @@
   "main": "http2s.js",
   "scripts": {
     "production": "node bin/default",
-    "development": "node bin/development"
+    "development": "node bin/development",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,10 @@
   "homepage": "https://github.com/stigok/http2s#readme",
   "dependencies": {
     "connect": "^3.4.0"
+  },
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
   },
   "xo": {
     "space": true
