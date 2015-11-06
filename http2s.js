@@ -28,37 +28,13 @@ var settings = {
   verbose: false
 };
 
-// Catch all requests and provide link to https site
-var requestHandler = function(req, res) {
-  if (settings.verbose) console.log('HTTP Request received for :' + settings.http + req.url);
-
-  // Set redirection url
-  var url = util.format('https://%s:%d%s',
-    settings.hostname,
-    settings.https,
-    settings.singleTarget || req.url
-  );
-
-  // Redirect automatically or respond with a 404 with custom message
-  if (settings.auto) {
-    res.writeHead(settings.redirectStatus, { 'Location' : url });
-    return res.end();
-  }
-  else {
-    res.writeHead(settings.messageStatus,
-                  { 'Content-Type': 'text/html; charset=utf-8' },
-                  util.format(settings.message, url));
-    return res.end();
-  }
-}
-
-module.exports = function(options, cb) {
-  if (typeof options === "function") {
+module.exports = function (options, cb) {
+  if (typeof options === 'function') {
     cb = options;
     options = {};
   }
 
-  // Set custom options
+  // Merge custom settings
   helpers.overwrite(settings, options);
 
   // Register request handler
@@ -104,4 +80,35 @@ module.exports = function(options, cb) {
     // Kill process on server errors
     process.exit(1);
   });
+};
+
+function requestHandler(req, res) {
+  if (settings.verbose) {
+    console.log('HTTP Request received for :' + settings.http + req.url);
+  }
+
+  // Set redirection url
+  var url = util.format('https://%s:%d%s',
+    settings.hostname,
+    settings.https,
+    settings.singleTarget || req.url
+  );
+
+  // Redirect automatically if specified
+  if (settings.auto) {
+    res.writeHead(settings.redirectStatus, {Location: url});
+    return res.end();
+  }
+
+  // Or respond with a 404 with custom message
+  var body = util.format(settings.message, url);
+  res.writeHead(
+    settings.messageStatus,
+    {
+      'Content-Length': Buffer.byteLength(body),
+      'Content-Type': 'text/html; charset=utf-8'
+    }
+  );
+  res.write(body);
+  res.end();
 }
