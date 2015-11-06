@@ -5,18 +5,27 @@ var helpers = require('./helpers.js');
 
 // Default settings
 var settings = {
-  http: 80,                // http port to listen to
-  https: 443,              // https port to redirect to
-  hostname: 'localhost',   // server hostname or ip
-  auto: true,              // automatically redirect
-  redirectStatus: 303,     // http status code to use for automatic redirect
-  singleTarget: false,     // false or '/path/to/page' to redirect all requests to
-                           // html message format to print to clients
+  // http port to listen to
+  http: 80,
+  // https port to redirect to
+  https: 443,
+  // server hostname or ip
+  hostname: 'localhost',
+  // automatically redirect
+  auto: true,
+  // http status code to use for automatic redirect
+  redirectStatus: 303,
+  // false or '/path/to/page' to redirect all requests to
+  singleTarget: false,
+  // html message format to print to clients
   message: 'Perhaps you are looking for ' +
            '<a href="%s" target="_self">the HTTPS site</a>?',
-  messageType: 'text/html',// mime content type to use for message
-  messageStatus: 404,      // http status code to use when showing message
-  verbose: false           // print all status messages to console
+  // mime content type to use for message
+  messageType: 'text/html',
+  // http status code to use when showing message
+  messageStatus: 404,
+  // print all status messages to console
+  verbose: false
 };
 
 // Catch all requests and provide link to https site
@@ -55,25 +64,31 @@ module.exports = function(options, cb) {
   // Register request handler
   app.use(requestHandler);
 
-  var server = app.listen(settings.http, settings.hostname, function(err, server) {
+  var server = app.listen(settings.http, settings.hostname, function (err) {
     if (settings.verbose) {
-      console.info('HTTP:%d -> HTTPS:%d redirection service started (%s)',
-                   settings.http, settings.https, settings.hostname);
+      console.info(
+        'HTTP:%d -> HTTPS:%d redirection service started (%s)',
+        settings.http, settings.https, settings.hostname
+      );
     }
 
     // Execute callback when server is running
-    if (typeof cb === "function") return cb(null, settings);
-  })
+    if (typeof cb === 'function') {
+      return cb(err, settings);
+    } else if (err) {
+      console.error(err);
+    }
+  });
 
-  server.on('error', function(err) {
+  server.on('error', function (err) {
     var printedFull = false;
 
     switch (err.code) {
-      case "EACCES":
-        console.error("Permission denied on attempt to listen to port " + settings.http);
+      case 'EACCES':
+        console.error('Permission denied on attempt to listen to port ' + settings.http);
         break;
-      case "EADDRINUSE":
-        console.error("Port " + settings.http +" is already in use");
+      case 'EADDRINUSE':
+        console.error('Port ' + settings.http + ' is already in use');
         break;
       default:
         console.error(err);
@@ -82,7 +97,9 @@ module.exports = function(options, cb) {
     }
 
     // Print original error as well in verbose mode
-    if (!printedFull && settings.verbose) console.error(err);
+    if (!printedFull && settings.verbose) {
+      console.log(err);
+    }
 
     // Kill process on server errors
     process.exit(1);

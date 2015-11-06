@@ -10,7 +10,8 @@ var options = {
 };
 
 // Run with custom settings
-http2s(options, function(err, settings) {
-  console.log("port %d -> %d http2s redirection started",
-              settings.http, settings.https);
+http2s(options, function (err) {
+  if (err) {
+    return console.error(err);
+  }
 });
