@@ -14,11 +14,12 @@
   },
   "keywords": [
     "connect",
+    "http",
+    "https",
     "http2s",
     "http2https",
-    "https",
-    "ssl",
-    "redirect"
+    "redirect",
+    "http-redirect"
   ],
   "author": "stigok",
   "license": "SEE LICENSE IN LICENSE",
