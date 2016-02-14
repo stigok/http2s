@@ -1,4 +1,5 @@
 var app = require('connect')();
+var http = require('http');
 var util = require('util');
 var helpers = require('./helpers.js');
 var logger = require('./logger.js');
@@ -42,7 +43,7 @@ module.exports = function (options, cb) {
   app.use(requestHandler);
 
   // Start listening for http connections
-  var server = app.listen(settings.http, settings.hostname, function (err) {
+  var server = http.createServer(app).listen(settings.http, settings.hostname, function (err) {
     logger.info(
       'HTTP:%d -> HTTPS:%d redirection service started (%s)',
       settings.http, settings.https, settings.hostname
