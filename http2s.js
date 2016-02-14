@@ -9,7 +9,7 @@ var settings = {
   http: 80,
   // https port to redirect to
   https: 443,
-  // server hostname or ip
+  // server hostname to bind http server to
   hostname: 'localhost',
   // automatically redirect
   auto: true,
@@ -64,7 +64,7 @@ function requestHandler(req, res) {
 
   // Set redirection url
   var url = util.format('https://%s:%d%s',
-    settings.hostname,
+    req.hostname,
     settings.https,
     settings.singleTarget || req.url
   );
