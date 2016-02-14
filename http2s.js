@@ -9,12 +9,12 @@ var settings = {
   http: 80,
   // https port to redirect to
   https: 443,
-  // server hostname or ip
+  // server hostname to bind http server to
   hostname: 'localhost',
   // automatically redirect
   auto: true,
   // http status code to use for automatic redirect
-  redirectStatus: 303,
+  redirectStatus: 302,
   // false or '/path/to/page' to redirect all requests to
   singleTarget: false,
   // html message format to print to clients
@@ -64,9 +64,9 @@ function requestHandler(req, res) {
 
   // Set redirection url
   var url = util.format('https://%s:%d%s',
-    settings.hostname,
+    req.hostname,
     settings.https,
-    settings.singleTarget || req.url
+    settings.singleTarget || req.originalUrl
   );
 
   // Redirect automatically if specified
@@ -92,16 +92,16 @@ function errorHandler(err) {
   var printedFull = false;
 
   switch (err.code) {
-    case 'EACCES':
-      logger.error('Permission denied when attempting to listen to port %d', settings.http);
-      break;
-    case 'EADDRINUSE':
-      logger.error('Port %d is already in use', settings.http);
-      break;
-    default:
-      logger.error(err);
-      printedFull = true;
-      break;
+  case 'EACCES':
+    logger.error('Permission denied when attempting to listen to port %d', settings.http);
+    break;
+  case 'EADDRINUSE':
+    logger.error('Port %d is already in use', settings.http);
+    break;
+  default:
+    logger.error(err);
+    printedFull = true;
+    break;
   }
 
   // Print error details in verbose mode
