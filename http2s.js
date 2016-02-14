@@ -14,7 +14,7 @@ var settings = {
   // automatically redirect
   auto: true,
   // http status code to use for automatic redirect
-  redirectStatus: 303,
+  redirectStatus: 302,
   // false or '/path/to/page' to redirect all requests to
   singleTarget: false,
   // html message format to print to clients
