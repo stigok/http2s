@@ -1,11 +1,14 @@
-var app = require('connect')();
-var http = require('http');
-var util = require('util');
-var helpers = require('./helpers.js');
-var logger = require('./logger.js');
+'use strict';
+
+const connect = require('connect');
+const http = require('http');
+const util = require('util');
+const helpers = require('./helpers.js');
+const logger = require('./logger.js');
+const app = connect();
 
 // Default settings
-var settings = {
+const settings = {
   // http port to listen to
   http: 80,
   // https port to redirect to
@@ -39,11 +42,45 @@ module.exports = function (options, cb) {
   helpers.overwrite(settings, options);
   logger.logLevel = settings.logLevel;
 
-  // Register request handler
-  app.use(requestHandler);
+  // Request handlers
+  app.use(function (req, res, next) {
+    logger.verbose('HTTP Request received : ' + settings.http + req.url);
+    return next();
+  });
+
+  app.use(function (req, res) {
+    // Set redirection url
+    let url = util.format('https://%s:%d%s',
+      req.headers.host.split(':')[0],
+      settings.https,
+      settings.singleTarget || req.originalUrl
+    );
+    logger.log(url);
+
+    // Redirect automatically if specified
+    if (settings.auto) {
+      let headers = {
+        Location: url
+      };
+      res.writeHead(settings.redirectStatus, headers);
+      return res.end();
+    }
+
+    // Or respond with a 404 with custom message
+    let body = util.format(settings.message, url);
+    res.writeHead(
+      settings.messageStatus,
+      {
+        'Content-Length': Buffer.byteLength(body),
+        'Content-Type': 'text/html; charset=utf-8'
+      }
+    );
+    res.write(body);
+    res.end();
+  });
 
   // Start listening for http connections
-  var server = http.createServer(app).listen(settings.http, settings.hostname, function (err) {
+  const server = http.createServer(app).listen(settings.http, settings.hostname, function (err) {
     logger.info(
       'HTTP:%d -> HTTPS:%d redirection service started (%s)',
       settings.http, settings.https, settings.hostname
@@ -60,40 +97,8 @@ module.exports = function (options, cb) {
   server.on('error', errorHandler);
 };
 
-function requestHandler(req, res) {
-  logger.verbose('HTTP Request received : ' + settings.http + req.url);
-
-  // Set redirection url
-  var url = util.format('https://%s:%d%s',
-    req.hostname,
-    settings.https,
-    settings.singleTarget || req.originalUrl
-  );
-
-  // Redirect automatically if specified
-  if (settings.auto) {
-    var headers = {
-      Location: url
-    };
-    res.writeHead(settings.redirectStatus, headers);
-    return res.end();
-  }
-
-  // Or respond with a 404 with custom message
-  var body = util.format(settings.message, url);
-  res.writeHead(
-    settings.messageStatus,
-    {
-      'Content-Length': Buffer.byteLength(body),
-      'Content-Type': 'text/html; charset=utf-8'
-    }
-  );
-  res.write(body);
-  res.end();
-}
-
 function errorHandler(err) {
-  var printedFull = false;
+  let printedFull = false;
 
   switch (err.code) {
   case 'EACCES':
