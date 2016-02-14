@@ -13,8 +13,16 @@ npm install http2s
 ```javascript
 http2s([options,] [callback])
 ```
-
 Calls `callback(err, activeSettings)` on done
+
+#### CLI usage
+Command line usage (requires global install `npm install --global http2s`)
+
+```bash
+http2s [httpPort] [hostname]
+```
+
+Listens on `http://hostname:httpPort/*` and 302 redirects all requests to `https://hostname/`.
 
 ### Options
 
