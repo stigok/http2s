@@ -66,7 +66,7 @@ function requestHandler(req, res) {
   var url = util.format('https://%s:%d%s',
     req.hostname,
     settings.https,
-    settings.singleTarget || req.url
+    settings.singleTarget || req.originalUrl
   );
 
   // Redirect automatically if specified
