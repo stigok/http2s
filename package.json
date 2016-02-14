@@ -3,14 +3,12 @@
   "version": "1.0.2",
   "description": "HTTP to HTTPS redirection service",
   "main": "http2s.js",
-  "scripts": {
-    "production": "node bin/default",
-    "development": "node bin/development",
-    "test": "mocha"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stigok/http2s.git"
+  },
+  "scripts": {
+    "test": "mocha"
   },
   "keywords": [
     "connect",
