@@ -1,0 +1,11 @@
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
+
+'use strict';
+
+const http2s = require('../');
+
+http2s({
+  http: process.argv[2] || 8080,
+  hostname: process.argv[3] || 'localhost'
+});
