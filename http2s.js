@@ -92,16 +92,16 @@ function errorHandler(err) {
   var printedFull = false;
 
   switch (err.code) {
-    case 'EACCES':
-      logger.error('Permission denied when attempting to listen to port %d', settings.http);
-      break;
-    case 'EADDRINUSE':
-      logger.error('Port %d is already in use', settings.http);
-      break;
-    default:
-      logger.error(err);
-      printedFull = true;
-      break;
+  case 'EACCES':
+    logger.error('Permission denied when attempting to listen to port %d', settings.http);
+    break;
+  case 'EADDRINUSE':
+    logger.error('Port %d is already in use', settings.http);
+    break;
+  default:
+    logger.error(err);
+    printedFull = true;
+    break;
   }
 
   // Print error details in verbose mode
