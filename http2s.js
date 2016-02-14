@@ -72,7 +72,10 @@ function requestHandler(req, res) {
 
   // Redirect automatically if specified
   if (settings.auto) {
-    res.writeHead(settings.redirectStatus, {Location: url});
+    var headers = {
+      Location: url
+    };
+    res.writeHead(settings.redirectStatus, headers);
     return res.end();
   }
 
